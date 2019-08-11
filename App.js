@@ -1,32 +1,48 @@
 import React from "react"
-import { Text, View, StyleSheet, Button } from "react-native"
+import { Text, View, StyleSheet, Button, FlatList } from "react-native"
+import axios from "axios"
+import { jsxAttribute } from "@babel/types";
 class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      count: 1
+      count: 1,
+      articles: []
     }
+  }
+  componentDidMount() {
+    const url = "https://newsapi.org/v2/everything?q=bitcoin&from=2019-07-11&sortBy=publishedAt&apiKey=c41c232f8713419c8a445de4a7876df8"
+    axios.get(url).then((res) => {
+      this.setState({ articles: res.data.articles });
+    }).catch(err => {
+      alert(JSON.stringify(err))
+    });
   }
   increment = () => {
     this.setState({ count: this.state.count + 1 });
   }
   render() {
     return (
-      <view style={styles.main}>
+      <View style={styles.main}>
 
-        <view style={styles.toolbar}>
+        <View style={styles.toolbar}>
           <Text style={styles.text}>News App</Text>
           <Text style={styles.text}>More</Text>
-        </view>
+        </View>
+        <FlatList
+          data={this.state.articles}
+          renderItem={
+            ({ item }) => {
+              return (
+                <View>
+                  <Text>{item.author}</Text>
+                </View>
+              )
+            }
+          }
+        />
 
-        <view style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ fontSize: 30, fontWeight: "bold" }}>
-            {this.state.count}
-          </Text>
-        </view>
-        <Button title="Click" onPress={() => this.increment} style={{ flex: 1 }} />
-      </view>
-
+      </View>
     )
   }
 }
