@@ -1,5 +1,5 @@
 import React from "react"
-import { Text, View, StyleSheet, Button, FlatList } from "react-native"
+import { Text, View, StyleSheet, Button, FlatList, Image } from "react-native"
 import axios from "axios"
 import { jsxAttribute } from "@babel/types";
 class App extends React.Component {
@@ -34,14 +34,31 @@ class App extends React.Component {
           renderItem={
             ({ item }) => {
               return (
-                <View>
-                  <Text>{item.author}</Text>
+                <View style={styles.box}>
+                  <Image
+                    source={{ url: item.urlToImage }}
+                    style={{ height: 200, width: "100%" }}
+                  />
+                  <View style={styles.textView}>
+                    <Text>
+                      {item.author}
+                    </Text>
+                    <Text>
+                      {item.publishedat}
+                    </Text>
+                  </View>
+                  <Text style={styles.title}>
+                    {item.title}
+                  </Text>
+                  <Text style={styles.description}>
+                    {item.description}
+                  </Text>
                 </View>
               )
             }
           }
+          keyExtractor={(item, index) => index.toString()}
         />
-
       </View>
     )
   }
@@ -62,5 +79,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: "#ffffff"
+  }, title: {
+
+  }, description: {
+
   }
 })
